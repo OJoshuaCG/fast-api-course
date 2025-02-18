@@ -26,7 +26,7 @@ class MovieCreate(BaseModel):
     )  # , default="Esta pelicula trata acerca de...")
     year: int = Field(le=datetime.date.today().year, ge=1900)  # , default=2022)
     rating: float = Field(ge=0, le=10)  # , default=10)
-    category: str = Field(min_length=5, max_digits=20)  # , default="Accion")
+    category: str = Field(min_length=5, max_length=20)  # , default="Accion")
 
     model_config = {
         "json_schema_extra": {
@@ -50,24 +50,7 @@ class MovieUpdate(BaseModel):
     category: str
 
 
-movies: list[Movie] = [
-    {
-        "id": 1,
-        "title": "Avatar",
-        "overview": "Es un exuberante planeta llamado Pandora viven los Na'vi",
-        "year": 2009,
-        "rating": 7.8,
-        "category": "Accion",
-    },
-    {
-        "id": 2,
-        "title": "Avatar",
-        "overview": "Es un exuberante planeta llamado Pandora viven los Na'vi",
-        "year": 2005,
-        "rating": 8.2,
-        "category": "Comedia",
-    },
-]
+movies: list[Movie] = []
 
 
 @app.get("/", tags=["Home"])
@@ -106,7 +89,7 @@ def get_movie_by_category(category: str, year: int) -> Movie:
 
 @app.post("/movies", tags=["Movies"])
 def create_movie(movie: MovieCreate) -> list[Movie]:
-    movies.append(movie.model_dump())
+    movies.append(movie)
     return movies
 
 
